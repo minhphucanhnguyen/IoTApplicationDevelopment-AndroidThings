@@ -14,6 +14,8 @@ Raspberry Pi 3 model B running Android Things will be used in this course
 #### Hardware
 * Raspberry Pi 3 model B
 * 3 RGB LEDs (common anode)
+* Button
+* 1k registors
 * Wires
 
 ![alt text](https://github.com/minhphucanhnguyen/IoTApplicationDevelopment-AndroidThings/blob/master/images/Lab1IoT_bb.jpg)
