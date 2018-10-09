@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
     private boolean EnableBT1 = false;
     private boolean EnableBT2 = false;
     private boolean EnableBT3 = false;
-    private boolean EnableBT4 = false;
+    private boolean EnableBT4 = true;
     private boolean EnableBT5 = false;
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -101,6 +101,7 @@ public class MainActivity extends Activity {
                 mButtonGpio = PeripheralManager.getInstance().openGpio(pinName[3]);
                 mButtonGpio.setDirection(Gpio.DIRECTION_IN);
                 mButtonGpio.setEdgeTriggerType(Gpio.EDGE_FALLING);
+
                 mButtonGpio.registerGpioCallback(new GpioCallback() {
                     @Override
                     public boolean onGpioEdge(Gpio gpio) {
