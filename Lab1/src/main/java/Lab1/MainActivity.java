@@ -1,4 +1,4 @@
-package com.example.conghuong.lab_1_iot;
+package Lab1;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.GpioCallback;
 import com.google.android.things.pio.PeripheralManager;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 // Library to support normal pins using PWM
 import com.leinardi.android.things.pio.SoftPwm;
@@ -39,7 +38,7 @@ public class MainActivity extends Activity {
     private boolean EnableBT1 = false;
     private boolean EnableBT2 = false;
     private boolean EnableBT3 = false;
-    private boolean EnableBT4 = true;
+    private boolean EnableBT4 = false;
     private boolean EnableBT5 = false;
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -70,7 +69,7 @@ public class MainActivity extends Activity {
     // Aqua (0, 255, 255)
     int[][] colorValues = {{255, 0, 0}, {0, 255, 0}, {0, 0, 255}, {255, 255, 0}, {80, 0, 80}, {0, 255, 255}};
     String[] colorList = {"Red", "Green", "Blue", "Yellow", "Purple", "Aqua"};
-    int i = 0;
+    int index = 0;
     static final int freq = 120;
     static int duty_cycle = 0;
 
@@ -228,27 +227,21 @@ public class MainActivity extends Activity {
     private Runnable BT1 = new Runnable() {
         @Override
         public void run() {
-
             if (mRedLedGpio == null | mGreenLedGpio == null | mBlueLedGpio == null){
                 return;
             }
-            LedColor led = new LedColor();
-            int colorIndex = 0;
-            while(true) {
-                led.setColor(mRedLedGpio, colorValues[colorIndex][0], mGreenLedGpio, colorValues[colorIndex][1],
-                        mBlueLedGpio, colorValues[colorIndex][2]);
-                Log.d(TAG, "State set to " + colorList[colorIndex]);
-                // Sleep 1 second and change color
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                    colorIndex++;
-                    if (colorIndex == 6){
-                        colorIndex = 0;
-                    }
-                } catch (InterruptedException e){
-                    e.printStackTrace();
-                }
+            if (index == 5) {
+                index = 0;
             }
+            else {
+                index++;
+            }
+
+            LedColor led = new LedColor();
+            led.setColor(mRedLedGpio,colorValues[index][0], mGreenLedGpio, colorValues[index][1],
+                    mBlueLedGpio, colorValues[index][2]);
+
+            mHandler.postDelayed(BT1, mInterval);
         }
     };
 
@@ -257,16 +250,16 @@ public class MainActivity extends Activity {
         public void run() {
             if (mRedLedGpio==null | mGreenLedGpio ==null || mBlueLedGpio == null)
                 return;
-            if (i == 5) {
-                i = 0;
+            if (index == 5) {
+                index = 0;
             }
             else {
-                i++;
+                index++;
             }
 
             LedColor led = new LedColor();
-            led.setColor(mRedLedGpio,colorValues[i][0], mGreenLedGpio, colorValues[i][1],
-                    mBlueLedGpio, colorValues[i][2]);
+            led.setColor(mRedLedGpio,colorValues[index][0], mGreenLedGpio, colorValues[index][1],
+                    mBlueLedGpio, colorValues[index][2]);
             mHandler.postDelayed(BT2, mInterval);
 
         }
@@ -520,20 +513,8 @@ public class MainActivity extends Activity {
     }
     protected void onDestroy() {
         super.onDestroy();
-        if (EnableBT1) {
-            mHandler.removeCallbacks(BT1);
-        } else if (EnableBT2) {
-            mHandler.removeCallbacks(BT2);
-        } else if (EnableBT3) {
-            mHandler.removeCallbacks(BT3);
-        } else if (EnableBT4) {
-            mHandler.removeCallbacks(mInitRGBPwm);
-            mHandler.removeCallbacks(mInitRPwm);
-            mHandler.removeCallbacks(mInitGPwm);
-            mHandler.removeCallbacks(mInitBPwm);
-        } else if (EnableBT5) {
-            mHandler.removeCallbacks(BT5);
-        }
+
+        mHandler.removeCallbacksAndMessages(null);
 
         Log.i(TAG, "Closing LED GPIO pins");
         try {

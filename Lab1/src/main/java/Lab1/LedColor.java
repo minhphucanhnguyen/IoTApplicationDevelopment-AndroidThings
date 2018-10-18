@@ -1,4 +1,4 @@
-package com.example.conghuong.lab_1_iot;
+package Lab1;
 
 import com.google.android.things.pio.Gpio;
 
