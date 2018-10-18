@@ -59,7 +59,8 @@ public class MainActivity extends Activity {
     protected int Interval_1000ms = 1000;
     protected int Interval_500ms = 500;
     protected int Interval_100ms = 100;
-    int mInterval = 2000;
+    private int mInterval = 2000;
+    private int stepCount = 0;
 
     // Red (255, 0, 0)
     // Green (0, 255, 0)
@@ -241,7 +242,7 @@ public class MainActivity extends Activity {
             led.setColor(mRedLedGpio,colorValues[index][0], mGreenLedGpio, colorValues[index][1],
                     mBlueLedGpio, colorValues[index][2]);
 
-            mHandler.postDelayed(BT1, mInterval);
+            mHandler.postDelayed(BT1, Interval_2000ms);
         }
     };
 
@@ -453,64 +454,39 @@ public class MainActivity extends Activity {
     private Runnable BT5 = new Runnable() {
         @Override
         public void run() {
-            if (mRedLedGpio == null | mGreenLedGpio == null | mBlueLedGpio == null){
+            if (mRedLedGpio == null | mGreenLedGpio == null | mBlueLedGpio == null) {
                 return;
             }
             LedColor led = new LedColor();
-            int stepCount = 0;
             int step = 250;
 
             // Each step is 250ms, use lowest common multiple to change state of LEDs
-            while(true) {
-                led.setColor(mRedLedGpio, 0, mGreenLedGpio, 0, mBlueLedGpio, 0);
-                stepCount++;
-                try {
-                    // Display 3 LEDs - at 6th second
-                    if (stepCount % 12 == 0){
-                        mRedLedGpio.setValue(false);
-                        mGreenLedGpio.setValue(false);
-                        mBlueLedGpio.setValue(false);
-                    }
-                    // Display Red & Green LEDs - at 2nd second
-                    else if(stepCount % 4 == 0){
-                        mRedLedGpio.setValue(false);
-                        mGreenLedGpio.setValue(false);
-                        mBlueLedGpio.setValue(true);
-                    }
-                    // Display Red & Blue LEDs - at 3rd second
-                    else if(stepCount % 6 == 0){
-                        mRedLedGpio.setValue(false);
-                        mGreenLedGpio.setValue(true);
-                        mBlueLedGpio.setValue(false);
-                    }
-                    // Display Red LED - every 500ms
-                    else {
-                        mRedLedGpio.setValue(false);
-                        mGreenLedGpio.setValue(true);
-                        mBlueLedGpio.setValue(true);
-                    }
-                    sleep(step);
-
-                    // Off all LEDs
-                    mBlueLedGpio.setValue(true);
-                    mGreenLedGpio.setValue(true);
-                    mRedLedGpio.setValue(true);
-                    sleep(step);
-                }
-                catch (IOException e) {
-                    Log.e(TAG, "Error on PeripheralIO API", e);
-                }
-
+            stepCount++;
+            // Display 3 LEDs - at 6th second
+            if (stepCount % 24 == 0) {
+                led.setColor(mRedLedGpio, 255, mGreenLedGpio, 255, mBlueLedGpio, 255);
             }
+            // Display Red & Green LEDs - at 2nd second
+            else if (stepCount % 8 == 0) {
+                led.setColor(mRedLedGpio, 255, mGreenLedGpio, 255, mBlueLedGpio, 0);
+            }
+            // Display Red & Blue LEDs - at 3rd second
+            else if (stepCount % 12 == 0) {
+                led.setColor(mRedLedGpio, 255, mGreenLedGpio, 0, mBlueLedGpio, 255);
+            }
+            // Display Red LED - every 500ms
+            else if (stepCount % 2 == 0) {
+                led.setColor(mRedLedGpio, 255, mGreenLedGpio, 0, mBlueLedGpio, 0);
+            } else {
+                // Off all LEDs
+                led.setColor(mRedLedGpio, 0, mGreenLedGpio, 0, mBlueLedGpio, 0);
+            }
+
+            mHandler.postDelayed(BT5, step);
+
         }
     };
-    private void sleep(int milliseconds){
-        try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+
     protected void onDestroy() {
         super.onDestroy();
 

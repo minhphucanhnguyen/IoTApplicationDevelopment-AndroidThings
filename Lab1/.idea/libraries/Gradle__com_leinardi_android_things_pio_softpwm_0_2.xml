@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.leinardi.android.things:pio-softpwm-0.2">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/pio-softpwm-0.2.aar/200a31060b2007bda0e59743f0d9fa17/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/pio-softpwm-0.2.aar/200a31060b2007bda0e59743f0d9fa17/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.leinardi.android.things/pio-softpwm/0.2/86f28c2e497a61eae9f51ff4edd7b22294e9cb69/pio-softpwm-0.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
