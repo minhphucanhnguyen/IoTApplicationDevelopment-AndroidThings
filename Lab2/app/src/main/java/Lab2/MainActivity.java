@@ -501,7 +501,6 @@ public class MainActivity extends Activity {
                 else {
                     duty_cycle += 20;
                 }
-
                 mHandler.postDelayed(mInitBPwm, Interval_1000ms);
 
             } catch (IOException e){
@@ -663,6 +662,7 @@ public class MainActivity extends Activity {
                             break;
                         case 70:
                             pinDestructor(runningExercise);
+                            runningExercise = 0;
                             isReady = false;
                             break;
                         default:
